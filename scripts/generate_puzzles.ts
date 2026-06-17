@@ -235,7 +235,7 @@ function generatePuzzleForAnswer(
     candidates = candidates.filter((c) => matrix[guessIdx][c] === patKey);
 
     if (candidates.length === 1 && candidates[0] === answerIdx) {
-      return clues; // valid puzzle
+      return clues; // unique within the answers pool
     }
     if (candidates.length === 0) return null;
   }
@@ -265,15 +265,14 @@ async function main() {
   const answersPath = path.join(rootDir, "data", "answers.txt");
   const outputPath = path.join(rootDir, "data", "generated_puzzles.json");
 
-  console.log("Loading word list…");
+  console.log("Loading word lists…");
   const rawWords = fs.readFileSync(answersPath, "utf-8")
     .split("\n")
     .map((w) => w.trim().toUpperCase())
     .filter((w) => w.length === 5 && /^[A-Z]+$/.test(w));
-
-  // Deduplicate
   const words = [...new Set(rawWords)];
-  console.log(`Loaded ${words.length} words.`);
+  console.log(`Answer pool: ${words.length} words.`);
+
 
   console.log("Precomputing feedback matrix…");
   const matrix = buildFeedbackMatrix(words);

@@ -46,4 +46,8 @@ AGENTS.md
 CLAUDE.md
 SPECS.md
 /.claude/*
+
+# onedle
 ONEDLE.md
+data/valid_guesses.txt
+data/answers.txt

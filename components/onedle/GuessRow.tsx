@@ -50,7 +50,7 @@ export function GuessRow({ letters, pattern, revealed, isActive, shakeCount = 0,
             key={i}
             role="cell"
             aria-label={letter ? `${letter}: ${val === 2 ? "correct" : val === 1 ? "present" : val === 0 ? "absent" : "empty"}` : "empty"}
-            className="w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-mono font-bold text-xl border-2 select-none"
+            className="w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center font-mono font-bold text-2xl border-2 select-none"
             style={{
               backgroundColor: revealed && val >= 0 ? colors.bg : "var(--color-surface)",
               color: revealed && val >= 0 ? colors.text : "var(--color-text)",

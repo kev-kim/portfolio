@@ -11,7 +11,7 @@ export default function OnedleLayout({ children }: { children: React.ReactNode }
     <div className="min-h-screen bg-bg text-text flex flex-col">
       {/* Top bar */}
       <header className="border-b border-border sticky top-0 bg-bg z-10">
-        <div className="max-w-lg mx-auto px-4 h-12 flex items-center justify-between">
+        <div className="max-w-lg mx-auto px-4 h-12 grid grid-cols-3 items-center">
           <Link
             href="/"
             className="font-mono text-xs text-muted hover:text-text transition-colors"
@@ -20,16 +20,18 @@ export default function OnedleLayout({ children }: { children: React.ReactNode }
           </Link>
           <Link
             href="/onedle"
-            className="font-mono text-sm font-bold tracking-widest uppercase text-text hover:opacity-70 transition-opacity"
+            className="font-mono text-sm font-bold tracking-widest uppercase text-text hover:opacity-70 transition-opacity text-center"
           >
             Onedle
           </Link>
-          <Link
+          {/* Archive link — reserved for implementation blog post */}
+          {/* <Link
             href="/onedle/archive"
-            className="font-mono text-xs text-muted hover:text-text transition-colors"
+            className="font-mono text-xs text-muted hover:text-text transition-colors text-right"
           >
             Archive
-          </Link>
+          </Link> */}
+          <span />
         </div>
       </header>
 

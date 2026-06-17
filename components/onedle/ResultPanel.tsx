@@ -10,6 +10,7 @@ type Props = {
   puzzle: Puzzle;
   guess: string;
   attempts: number;
+  timeTaken?: number;
   allPuzzles: Puzzle[];
   completedPuzzles: Record<number, PuzzleResult>;
 };
@@ -23,19 +24,27 @@ const TIER_COLOR: Record<string, string> = {
 
 const EMOJI: Record<number, string> = { 0: "⬛", 1: "🟨", 2: "🟩" };
 
-function buildShareText(puzzle: Puzzle, attempts: number): string {
+function formatTime(s: number): string {
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${m}:${sec.toString().padStart(2, "0")}`;
+}
+
+function buildShareText(puzzle: Puzzle, attempts: number, timeTaken?: number): string {
   const clueLines = puzzle.clues.map((c) =>
     c.pattern.map((v) => EMOJI[v]).join("")
   );
+  const timeStr = timeTaken != null ? ` · ${formatTime(timeTaken)}` : "";
 
   return [
     `Onedle #${puzzle.id} — ${puzzle.difficultyTier}`,
-    `✓ in ${attempts} attempt${attempts === 1 ? "" : "s"}`,
+    `✓ in ${attempts} attempt${attempts === 1 ? "" : "s"}${timeStr}`,
     `https://kev-kim.com/onedle`
   ].join("\n");
 }
 
-export function ResultPanel({ puzzle, guess, attempts, allPuzzles, completedPuzzles }: Props) {
+export function ResultPanel({ puzzle, guess, attempts, timeTaken, allPuzzles, completedPuzzles }: Props) {
   const [copied, setCopied] = useState(false);
 
   const nextPuzzle = allPuzzles.find((p) => p.id === puzzle.id + 1);
@@ -43,7 +52,7 @@ export function ResultPanel({ puzzle, guess, attempts, allPuzzles, completedPuzz
   const nextAvailable = nextPuzzle && nextPuzzle.date <= todayStr;
 
   async function handleShare() {
-    const text = buildShareText(puzzle, attempts);
+    const text = buildShareText(puzzle, attempts, timeTaken);
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -62,6 +71,9 @@ export function ResultPanel({ puzzle, guess, attempts, allPuzzles, completedPuzz
           Solved in{" "}
           <span className="text-text font-bold">{attempts}</span>{" "}
           {attempts === 1 ? "attempt" : "attempts"}
+          {timeTaken != null && (
+            <span className="text-muted"> · <span className="text-text font-bold tabular-nums">{formatTime(timeTaken)}</span></span>
+          )}
         </p>
         <p className="font-mono text-xs text-muted mt-1">
           The answer was{" "}
@@ -70,10 +82,13 @@ export function ResultPanel({ puzzle, guess, attempts, allPuzzles, completedPuzz
       </div>
 
       {/* Puzzle info */}
-      <div className="flex gap-4 text-xs font-mono text-muted border border-border rounded-sm px-4 py-2 divide-x divide-border">
-        <span className="pr-4">Puzzle <span className="text-text">#{puzzle.id}</span></span>
-        <span className={`px-4 ${TIER_COLOR[puzzle.difficultyTier]}`}>{puzzle.difficultyTier}</span>
-        <span className="pl-4">Attempts <span className="text-text">{attempts}</span></span>
+      <div className="inline-flex text-xs font-mono text-muted border border-border rounded-sm divide-x divide-border">
+        <span className="px-4 py-2">Puzzle <span className="text-text">#{puzzle.id}</span></span>
+        <span className={`px-4 py-2 ${TIER_COLOR[puzzle.difficultyTier]}`}>{puzzle.difficultyTier}</span>
+        <span className="px-4 py-2">Attempts <span className="text-text">{attempts}</span></span>
+        {timeTaken != null && (
+          <span className="px-4 py-2 tabular-nums">Time <span className="text-text">{formatTime(timeTaken)}</span></span>
+        )}
       </div>
 
       {/* Actions */}
@@ -90,12 +105,20 @@ export function ResultPanel({ puzzle, guess, attempts, allPuzzles, completedPuzz
         >
           See all puzzles
         </Link>
+        {puzzle.id > 1 && (
+          <Link
+            href={`/onedle/${puzzle.id - 1}`}
+            className="font-mono text-xs px-4 py-2 border border-accent text-accent hover:bg-accent/10 transition-colors rounded-sm"
+          >
+            ← Prev
+          </Link>
+        )}
         {nextAvailable && nextPuzzle && (
           <Link
             href={`/onedle/${nextPuzzle.id}`}
             className="font-mono text-xs px-4 py-2 border border-accent text-accent hover:bg-accent/10 transition-colors rounded-sm"
           >
-            Next puzzle →
+            Next →
           </Link>
         )}
       </div>

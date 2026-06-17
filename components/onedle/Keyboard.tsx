@@ -22,18 +22,29 @@ const STATE_COLORS: Record<KeyState, string> = {
 
 export function Keyboard({ keyStates, onKey }: Props) {
   return (
-    <div className="flex flex-col gap-1.5 items-center select-none" role="group" aria-label="On-screen keyboard">
+    <div
+      className="flex flex-col gap-1.5 items-center w-full sm:w-auto select-none"
+      role="group"
+      aria-label="On-screen keyboard"
+    >
       {ROWS.map((row, ri) => (
-        <div key={ri} className="flex gap-1.5">
+        <div key={ri} className="flex gap-1 sm:gap-1.5 w-full sm:w-auto justify-center">
           {row.map((key) => {
             const state = keyStates[key] ?? "unused";
-            const isWide = key === "ENTER" || key === "⌫";
             return (
               <button
                 key={key}
                 aria-label={key === "⌫" ? "Backspace" : key}
-                onClick={() => onKey(key)}
-                className={`h-12 sm:h-14 rounded font-mono font-bold text-sm border transition-colors ${isWide ? "px-3 text-xs" : "w-9 sm:w-10"} ${STATE_COLORS[state]}`}
+                onPointerDown={(e) => { e.preventDefault(); onKey(key); }}
+                className={`
+                  h-14 sm:h-14 rounded font-mono font-bold border transition-colors
+                  ${key === "ENTER"
+                    ? "flex-[1.5] sm:flex-none sm:px-3 text-xs"
+                    : key === "⌫"
+                    ? "flex-[1.5] sm:flex-none sm:px-3 text-xl sm:text-xl"
+                    : "flex-1 sm:flex-none sm:w-10 text-sm"}
+                  ${STATE_COLORS[state]}
+                `}
                 style={
                   state === "present"
                     ? { backgroundColor: "#b59f3b" }

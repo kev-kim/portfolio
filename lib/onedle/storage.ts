@@ -5,6 +5,7 @@ export type PuzzleResult = {
   guess: string;
   date: string;
   attempts?: number;
+  timeTaken?: number; // seconds
 };
 
 export type OnedleStorage = {
@@ -79,14 +80,15 @@ export function saveResult(
   guess: string,
   date: string,
   tier: DifficultyTier,
-  attempts: number = 1
+  attempts: number = 1,
+  timeTaken?: number
 ): void {
   const data = load();
 
   if (data.completedPuzzles[puzzleId]?.solved) return; // already solved, don't overwrite
 
   const isOverwrite = !!data.completedPuzzles[puzzleId]; // replacing a failed attempt
-  data.completedPuzzles[puzzleId] = { solved, guess, date, attempts };
+  data.completedPuzzles[puzzleId] = { solved, guess, date, attempts, timeTaken };
   if (!isOverwrite) data.statistics.played++;
   if (!isOverwrite) data.statistics.byTier[tier].played++;
   if (solved) data.statistics.solved++;
