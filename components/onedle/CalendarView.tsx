@@ -9,6 +9,7 @@ type Props = {
   puzzles: Puzzle[];
   completedPuzzles: Record<number, PuzzleResult>;
   initialMonth?: string; // "YYYY-MM"
+  highlightDate?: string; // "YYYY-MM-DD" — which date gets the accent border (defaults to today)
 };
 
 function monthKey(date: string): string {
@@ -35,8 +36,9 @@ const MONTH_NAMES = [
   "July", "August", "September", "October", "November", "December",
 ];
 
-export function CalendarView({ puzzles, completedPuzzles, initialMonth }: Props) {
+export function CalendarView({ puzzles, completedPuzzles, initialMonth, highlightDate }: Props) {
   const todayStr = new Date().toISOString().slice(0, 10);
+  const accentDate = highlightDate ?? todayStr;
   const defaultMonth = initialMonth ?? monthKey(todayStr);
   const [currentMonth, setCurrentMonth] = useState(defaultMonth);
 
@@ -114,7 +116,7 @@ export function CalendarView({ puzzles, completedPuzzles, initialMonth }: Props)
 
           const puzzle = dateMap.get(dateStr);
           const result = puzzle ? completedPuzzles[puzzle.id] : undefined;
-          const isToday = dateStr === todayStr;
+          const isAccented = dateStr === accentDate;
           const isFuture = dateStr > todayStr;
           const day = parseInt(dateStr.split("-")[2]);
 
@@ -146,7 +148,7 @@ export function CalendarView({ puzzles, completedPuzzles, initialMonth }: Props)
             <Link
               key={i}
               href={`/onedle/${puzzle.id}`}
-              className={`aspect-square flex flex-col items-center justify-center rounded transition-all hover:scale-105 ${bg} ${isToday ? "border-2 border-accent" : "border border-border/50"}`}
+              className={`aspect-square flex flex-col items-center justify-center rounded transition-all hover:scale-105 ${bg} ${isAccented ? "border-2 border-accent" : "border border-border/50"}`}
               title={`Puzzle #${puzzle.id} — ${puzzle.difficultyTier}`}
             >
               <span className={`text-xs font-mono font-medium ${textColor}`}>{day}</span>

@@ -130,6 +130,7 @@ export function ResultPanel({ puzzle, guess, attempts, timeTaken, allPuzzles, co
           puzzles={allPuzzles}
           completedPuzzles={completedPuzzles}
           initialMonth={puzzle.date.slice(0, 7)}
+          highlightDate={puzzle.date}
         />
       </div>
     </div>
