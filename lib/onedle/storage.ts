@@ -16,18 +16,20 @@ export type OnedleStorage = {
   statistics: {
     played: number;
     solved: number;
-    byTier: Record<DifficultyTier, { played: number; solved: number }>;
+    fastestTime: number | null;
+    totalSolveTime: number;
+    byTier: Record<DifficultyTier, { played: number; solved: number; fastestTime: number | null; totalSolveTime: number }>;
   };
 };
 
 const KEY = "onedle_v1";
 const PROGRESS_KEY = "onedle_v1_progress";
 
-const DEFAULT_TIER_STATS = (): Record<DifficultyTier, { played: number; solved: number }> => ({
-  Easy: { played: 0, solved: 0 },
-  Medium: { played: 0, solved: 0 },
-  Hard: { played: 0, solved: 0 },
-  Expert: { played: 0, solved: 0 },
+const DEFAULT_TIER_STATS = (): Record<DifficultyTier, { played: number; solved: number; fastestTime: number | null; totalSolveTime: number }> => ({
+  Easy: { played: 0, solved: 0, fastestTime: null, totalSolveTime: 0 },
+  Medium: { played: 0, solved: 0, fastestTime: null, totalSolveTime: 0 },
+  Hard: { played: 0, solved: 0, fastestTime: null, totalSolveTime: 0 },
+  Expert: { played: 0, solved: 0, fastestTime: null, totalSolveTime: 0 },
 });
 
 const DEFAULT: OnedleStorage = {
@@ -35,7 +37,7 @@ const DEFAULT: OnedleStorage = {
   streak: 0,
   bestStreak: 0,
   lastPlayedDate: null,
-  statistics: { played: 0, solved: 0, byTier: DEFAULT_TIER_STATS() },
+  statistics: { played: 0, solved: 0, fastestTime: null, totalSolveTime: 0, byTier: DEFAULT_TIER_STATS() },
 };
 
 function load(): OnedleStorage {
@@ -44,6 +46,19 @@ function load(): OnedleStorage {
     const raw = localStorage.getItem(KEY);
     if (!raw) return structuredClone(DEFAULT);
     const parsed = JSON.parse(raw) as Partial<OnedleStorage>;
+    const byTier = DEFAULT_TIER_STATS();
+    const parsedTiers = (parsed.statistics?.byTier ?? {}) as Record<string, any>;
+    for (const tier of ["Easy", "Medium", "Hard", "Expert"] as DifficultyTier[]) {
+      const t = parsedTiers[tier] as any;
+      if (t) {
+        byTier[tier] = {
+          played: t.played ?? 0,
+          solved: t.solved ?? 0,
+          fastestTime: t.fastestTime ?? null,
+          totalSolveTime: t.totalSolveTime ?? 0,
+        };
+      }
+    }
     return {
       completedPuzzles: parsed.completedPuzzles ?? {},
       streak: parsed.streak ?? 0,
@@ -52,7 +67,9 @@ function load(): OnedleStorage {
       statistics: {
         played: parsed.statistics?.played ?? 0,
         solved: parsed.statistics?.solved ?? 0,
-        byTier: { ...DEFAULT_TIER_STATS(), ...(parsed.statistics?.byTier ?? {}) },
+        fastestTime: (parsed.statistics as any)?.fastestTime ?? null,
+        totalSolveTime: (parsed.statistics as any)?.totalSolveTime ?? 0,
+        byTier,
       },
     };
   } catch {
@@ -93,6 +110,12 @@ export function saveResult(
   if (!isOverwrite) data.statistics.byTier[tier].played++;
   if (solved) data.statistics.solved++;
   if (solved) data.statistics.byTier[tier].solved++;
+  if (solved && timeTaken !== undefined) {
+    if (data.statistics.fastestTime === null || timeTaken < data.statistics.fastestTime) data.statistics.fastestTime = timeTaken;
+    data.statistics.totalSolveTime += timeTaken;
+    if (data.statistics.byTier[tier].fastestTime === null || timeTaken < data.statistics.byTier[tier].fastestTime) data.statistics.byTier[tier].fastestTime = timeTaken;
+    data.statistics.byTier[tier].totalSolveTime += timeTaken;
+  }
 
   // Update streak
   const today = new Date().toISOString().slice(0, 10);
@@ -112,9 +135,16 @@ export function saveResult(
   save(data);
 }
 
-export function getStats(): OnedleStorage["statistics"] & { streak: number; bestStreak: number } {
+export function getStats() {
   const data = load();
-  return { ...data.statistics, streak: data.streak, bestStreak: data.bestStreak };
+  const { played, solved, fastestTime, totalSolveTime, byTier } = data.statistics;
+  const avgTime = solved > 0 ? Math.round(totalSolveTime / solved) : null;
+  const tierStats = {} as Record<DifficultyTier, { played: number; solved: number; fastestTime: number | null; avgTime: number | null }>;
+  for (const tier of ["Easy", "Medium", "Hard", "Expert"] as DifficultyTier[]) {
+    const t = byTier[tier];
+    tierStats[tier] = { played: t.played, solved: t.solved, fastestTime: t.fastestTime, avgTime: t.solved > 0 ? Math.round(t.totalSolveTime / t.solved) : null };
+  }
+  return { played, solved, fastestTime, avgTime, byTier: tierStats };
 }
 
 export function getInProgressAttempts(puzzleId: number): number {

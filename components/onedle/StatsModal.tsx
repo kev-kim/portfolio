@@ -5,9 +5,9 @@ import type { DifficultyTier } from "@/lib/onedle/wordle";
 type Stats = {
   played: number;
   solved: number;
-  streak: number;
-  bestStreak: number;
-  byTier: Record<DifficultyTier, { played: number; solved: number }>;
+  fastestTime: number | null;
+  avgTime: number | null;
+  byTier: Record<DifficultyTier, { played: number; solved: number; fastestTime: number | null; avgTime: number | null }>;
 };
 
 type Props = {
@@ -23,9 +23,14 @@ const TIER_COLOR: Record<DifficultyTier, string> = {
   Expert: "text-red-500",
 };
 
-export function StatsModal({ stats, onClose }: Props) {
-  const solveRate = stats.played > 0 ? Math.round((stats.solved / stats.played) * 100) : 0;
+function formatTime(s: number): string {
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s / 60);
+  const sec = s % 60;
+  return `${m}:${sec.toString().padStart(2, "0")}`;
+}
 
+export function StatsModal({ stats, onClose }: Props) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-text/20 backdrop-blur-sm"
@@ -45,8 +50,8 @@ export function StatsModal({ stats, onClose }: Props) {
           {[
             { label: "Played", value: stats.played },
             { label: "Solved", value: stats.solved },
-            { label: "Win %", value: `${solveRate}%` },
-            { label: "Streak", value: stats.streak },
+            { label: "Fastest", value: stats.fastestTime !== null ? formatTime(stats.fastestTime) : "—" },
+            { label: "Avg Time", value: stats.avgTime !== null ? formatTime(stats.avgTime) : "—" },
           ].map(({ label, value }) => (
             <div key={label} className="text-center">
               <div className="text-2xl font-bold font-mono text-text">{value}</div>
@@ -55,23 +60,18 @@ export function StatsModal({ stats, onClose }: Props) {
           ))}
         </div>
 
-        <div className="border-t border-border/50 pt-4 mb-4">
-          <div className="flex justify-between text-xs font-mono text-muted mb-2">
-            <span>Best Streak</span>
-            <span className="text-text font-bold">{stats.bestStreak}</span>
-          </div>
-        </div>
-
         {/* By difficulty */}
         <div className="space-y-1.5">
           <p className="text-xs font-mono text-muted uppercase tracking-wider mb-2">By Difficulty</p>
           {TIERS.map((tier) => {
             const t = stats.byTier[tier];
-            const pct = t.played > 0 ? Math.round((t.solved / t.played) * 100) : 0;
             return (
               <div key={tier} className="flex items-center justify-between text-xs font-mono">
                 <span className={TIER_COLOR[tier]}>{tier}</span>
-                <span className="text-muted">{t.solved}/{t.played} ({pct}%)</span>
+                <div className="flex gap-3 text-muted">
+                  <span>avg {t.avgTime !== null ? formatTime(t.avgTime) : "—"}</span>
+                  <span>best {t.fastestTime !== null ? formatTime(t.fastestTime) : "—"}</span>
+                </div>
               </div>
             );
           })}
