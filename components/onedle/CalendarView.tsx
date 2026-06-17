@@ -163,7 +163,6 @@ export function CalendarView({ puzzles, completedPuzzles, initialMonth, highligh
       {/* Legend */}
       <div className="flex gap-4 mt-3 justify-center text-xs font-mono text-muted">
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-green-500/20 inline-block border border-green-500/40" />Solved</span>
-        <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-red-500/20 inline-block border border-red-500/40" />Missed</span>
         <span className="flex items-center gap-1"><span className="w-3 h-3 rounded bg-surface inline-block border border-border/50" />Unplayed</span>
       </div>
     </div>
