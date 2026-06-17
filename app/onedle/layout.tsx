@@ -1,0 +1,42 @@
+import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: { default: "Onedle", template: "%s — Onedle" },
+  description: "A one-shot Wordle variant. One guess. Every day.",
+};
+
+export default function OnedleLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-bg text-text flex flex-col">
+      {/* Top bar */}
+      <header className="border-b border-border sticky top-0 bg-bg z-10">
+        <div className="max-w-lg mx-auto px-4 h-12 flex items-center justify-between">
+          <Link
+            href="/"
+            className="font-mono text-xs text-muted hover:text-text transition-colors"
+          >
+            ← Kevin Kim
+          </Link>
+          <Link
+            href="/onedle"
+            className="font-mono text-sm font-bold tracking-widest uppercase text-text hover:opacity-70 transition-opacity"
+          >
+            Onedle
+          </Link>
+          <Link
+            href="/onedle/archive"
+            className="font-mono text-xs text-muted hover:text-text transition-colors"
+          >
+            Archive
+          </Link>
+        </div>
+      </header>
+
+      {/* Content */}
+      <main className="flex-1 max-w-lg mx-auto w-full px-4 pt-6">
+        {children}
+      </main>
+    </div>
+  );
+}
