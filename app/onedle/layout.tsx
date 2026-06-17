@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
   title: { default: "Onedle", template: "%s — Onedle" },
@@ -24,14 +25,9 @@ export default function OnedleLayout({ children }: { children: React.ReactNode }
           >
             Onedle
           </Link>
-          {/* Archive link — reserved for implementation blog post */}
-          {/* <Link
-            href="/onedle/archive"
-            className="font-mono text-xs text-muted hover:text-text transition-colors text-right"
-          >
-            Archive
-          </Link> */}
-          <span />
+          <div className="flex justify-end">
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 

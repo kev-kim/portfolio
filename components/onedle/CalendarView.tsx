@@ -146,7 +146,7 @@ export function CalendarView({ puzzles, completedPuzzles, initialMonth }: Props)
             <Link
               key={i}
               href={`/onedle/${puzzle.id}`}
-              className={`aspect-square flex flex-col items-center justify-center rounded border transition-all hover:scale-105 ${bg} ${isToday ? "ring-2 ring-accent" : "border-border/50"}`}
+              className={`aspect-square flex flex-col items-center justify-center rounded transition-all hover:scale-105 ${bg} ${isToday ? "border-2 border-accent" : "border border-border/50"}`}
               title={`Puzzle #${puzzle.id} — ${puzzle.difficultyTier}`}
             >
               <span className={`text-xs font-mono font-medium ${textColor}`}>{day}</span>
