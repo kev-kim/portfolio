@@ -5,6 +5,18 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 export const metadata: Metadata = {
   title: { default: "Onedle", template: "%s — Onedle" },
   description: "A one-shot Wordle variant. One guess. Every day.",
+  openGraph: {
+    title: "Onedle",
+    description: "A one-shot Wordle variant. One guess. Every day.",
+    url: "https://kev-kim.com/onedle",
+    siteName: "Onedle",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Onedle",
+    description: "A one-shot Wordle variant. One guess. Every day.",
+  },
 };
 
 export default function OnedleLayout({ children }: { children: React.ReactNode }) {

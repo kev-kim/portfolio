@@ -16,9 +16,22 @@ export async function generateMetadata({
   const { id } = await params;
   const puzzle = getPuzzleById(parseInt(id));
   if (!puzzle) return { title: "Puzzle Not Found" };
+  const description = `Onedle #${puzzle.id}: a ${puzzle.difficultyTier} one-shot Wordle puzzle for ${puzzle.date}.`;
   return {
     title: `Puzzle #${puzzle.id} — ${puzzle.difficultyTier}`,
-    description: `Onedle #${puzzle.id}: a ${puzzle.difficultyTier} one-shot Wordle puzzle for ${puzzle.date}.`,
+    description,
+    openGraph: {
+      title: `Onedle #${puzzle.id} — ${puzzle.difficultyTier}`,
+      description,
+      url: `https://kev-kim.com/onedle/${puzzle.id}`,
+      siteName: "Onedle",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Onedle #${puzzle.id} — ${puzzle.difficultyTier}`,
+      description,
+    },
   };
 }
 
