@@ -6,6 +6,6 @@ export const profile = {
   links: {
     github: "https://github.com/kev-kim",
     linkedin: "https://www.linkedin.com/in/kev-kim/",
-    email: "kkim170@jhu.edu",
+    email: "kevin.kangmin.kim@gmail.com",
   },
 };

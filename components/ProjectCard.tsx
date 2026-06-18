@@ -11,11 +11,18 @@ export function ProjectCard({ project, variant }: Props) {
     return (
       <Link
         href={`/projects/${project.slug}`}
-        className="group block border border-border rounded-sm p-6 hover:border-accent hover:-translate-y-1 hover:bg-surface transition-all duration-200 no-underline"
+        className="group flex flex-col h-full border border-border rounded-sm p-6 hover:border-accent hover:-translate-y-1 hover:bg-surface transition-all duration-200 no-underline"
       >
-        <p className="text-xs font-mono text-muted mb-2 group-hover:text-accent transition-colors">
-          {project.stack.join(" · ")}
-        </p>
+        <div className="flex flex-wrap gap-1 mb-2">
+          {project.stack.map((tech) => (
+            <span
+              key={tech}
+              className="text-xs font-mono text-muted px-1.5 py-0.5 border border-border rounded-sm group-hover:text-accent group-hover:border-accent transition-colors"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
         <h3 className="text-lg font-semibold text-text mb-1 group-hover:text-accent transition-colors">
           {project.title}
         </h3>

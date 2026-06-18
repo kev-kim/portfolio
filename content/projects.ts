@@ -18,19 +18,34 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: "sijang",
+    title: "Sijang",
+    tagline: "Korean market intelligence platform.",
+    featured: true,
+    role: "Solo developer.",
+    stack: ["FastAPI", "PostgreSQL", "pgvector", "Next.js", "TypeScript", "Dagster", "Supabase"],
+    summary:
+      "A Korean market intelligence platform covering 3,000+ company profiles, with semantic and full-text search powered by pgvector and Meilisearch for 50+ users.",
+    highlights: [
+      "Built a FastAPI + PostgreSQL backend with pgvector and Meilisearch powering semantic and full-text search across 3,000+ company profiles.",
+      "Engineered a multi-stage NLP pipeline in Dagster using Gemini Flash for triage and Claude Sonnet for structured entity and event extraction, with Voyage AI embeddings and SimHash-based deduplication.",
+      "Built a Next.js + TypeScript frontend with real-time news timelines and company-level filtering, deployed on Vercel with Supabase Auth and Fly.io API hosting.",
+    ],
+    links: [],
+  },
+  {
     slug: "splitit",
     title: "Split.it",
     tagline: "Fare-splitting platform for the JHU community.",
     featured: true,
     role: "Backend architecture, external-service integrations, full chat backend, documentation.",
-    stack: ["MongoDB", "Express", "React", "Node.js"],
+    stack: ["MongoDB", "Express", "React", "Node.js", "WebSockets", "AWS Lambda"],
     summary:
       "A platform that helps JHU students using ride-share apps find others to split fares with, leveraging the trust of the Hopkins community to make cheap transport easy to organize.",
     highlights: [
-      "Designed and built the entire backend architecture.",
-      "Integrated external ride-sharing and payment services.",
-      "Built the fully-integrated real-time chat backend from scratch.",
-      "Authored most of the project documentation.",
+      "Launched to 2,000+ active JHU users with a fully integrated real-time chat system built on WebSockets.",
+      "Secured the API layer with end-to-end encryption, AWS Lambda tokenization, and OAuth2 SSO via JHU student accounts.",
+      "Automated deployment with a GitHub Actions CI/CD pipeline.",
     ],
     links: [
       { label: "Live site", href: "https://www.trysplit.it/" },
@@ -41,20 +56,19 @@ export const projects: Project[] = [
   {
     slug: "seek",
     title: "SEEK",
-    tagline: "Making large language models smaller and smarter.",
-    featured: true,
-    // TODO: confirm role
-    role: "TODO",
-    // TODO: confirm ML/NLP libraries used
-    stack: ["Python" /* TODO: add ML/NLP libraries */],
+    tagline: "Ensemble knowledge distillation for domain-specific QA.",
+    featured: false,
+    role: "Team member (3-person project).",
+    stack: ["Python", "PyTorch", "Hugging Face Transformers", "Weights & Biases"],
     summary:
-      "Stacked Ensemble of Expert Knowledge — an ML/NLP pipeline that uses model distillation to improve a large language model's performance on domain-specific knowledge.",
-    // TODO: fill in highlights
+      "Stacked Ensemble of Expert Models — an NLP pipeline that fine-tunes specialist models on domain-specific datasets and uses a learned routing mechanism to direct queries to the right expert.",
     highlights: [
-      "TODO: add project highlights.",
+      "Fine-tuned domain-specific expert models on ARC, SciQ, MedMCQA, and AquaRat benchmarks.",
+      "Built a query router that maps inputs to the most relevant specialist using learned routing maps.",
+      "Applied knowledge distillation across the ensemble to compress multi-domain QA performance.",
     ],
     links: [
-      // TODO: add repo / writeup link
+      { label: "GitHub", href: "https://github.com/kev-kim/SEEK-Stacked-Ensemble-of-Expert-Models" },
     ],
   },
   {
