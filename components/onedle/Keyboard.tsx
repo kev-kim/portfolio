@@ -15,7 +15,7 @@ const ROWS = [
 
 const STATE_COLORS: Record<KeyState, string> = {
   unused: "bg-surface text-text border-border hover:bg-muted/20",
-  absent: "bg-surface/50 text-muted border-border/50",
+  absent: "bg-[#c0c0c0] dark:bg-[#3a3a3a] text-[#999] dark:text-[#555] border-transparent",
   present: "text-white border-transparent",
   correct: "text-white border-transparent",
 };
@@ -37,7 +37,7 @@ export function Keyboard({ keyStates, onKey }: Props) {
                 aria-label={key === "⌫" ? "Backspace" : key}
                 onPointerDown={(e) => { e.preventDefault(); onKey(key); }}
                 className={`
-                  h-14 sm:h-14 rounded font-mono font-bold border transition-colors
+                  h-14 sm:h-14 rounded font-mono font-bold border transition-colors duration-300
                   ${key === "ENTER"
                     ? "flex-[1.5] sm:flex-none sm:px-3 text-xs"
                     : key === "⌫"

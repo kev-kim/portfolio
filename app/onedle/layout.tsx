@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 
 export default function OnedleLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-bg text-text flex flex-col">
+    <div className="min-h-screen bg-bg text-text flex flex-col transition-colors duration-300">
       {/* Top bar */}
-      <header className="border-b border-border sticky top-0 bg-bg z-10">
+      <header className="border-b border-border sticky top-0 bg-bg z-10 transition-colors duration-300">
         <div className="max-w-lg mx-auto px-4 h-12 grid grid-cols-3 items-center">
           <Link
             href="/"

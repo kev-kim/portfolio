@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   letters: string[];
@@ -19,6 +19,14 @@ const TILE_COLORS: Record<number, { bg: string; text: string; border: string }> 
 
 export function GuessRow({ letters, pattern, revealed, isActive, shakeCount = 0, shakeDuration = 500 }: Props) {
   const rowRef = useRef<HTMLDivElement>(null);
+  // Pre-revealed tiles (clues) skip the staggered transition so theme switches are instant.
+  // For the active row, transition is active during the flip reveal, then cleared.
+  const [transitioned, setTransitioned] = useState(!!revealed);
+  useEffect(() => {
+    if (!revealed) return;
+    const t = setTimeout(() => setTransitioned(true), 4 * 80 + 400 + 100);
+    return () => clearTimeout(t);
+  }, [revealed]);
 
   useEffect(() => {
     if (shakeCount === 0 || !rowRef.current) return;
@@ -55,7 +63,11 @@ export function GuessRow({ letters, pattern, revealed, isActive, shakeCount = 0,
               backgroundColor: revealed && val >= 0 ? colors.bg : "var(--color-surface)",
               color: revealed && val >= 0 ? colors.text : "var(--color-text)",
               borderColor: isActive && letter ? "var(--color-text)" : revealed && val >= 0 ? colors.border : "var(--color-border)",
-              transition: revealed ? `background-color 0.1s ${delay}, border-color 0.1s ${delay}, color 0.1s ${delay}` : undefined,
+              transition: revealed
+                ? (transitioned
+                  ? `background-color 0.3s, border-color 0.3s, color 0.3s`
+                  : `background-color 0.1s ${delay}, border-color 0.1s ${delay}, color 0.1s ${delay}`)
+                : undefined,
               animation: revealed && val >= 0 ? `flipTile 0.4s ${delay} both` : undefined,
             }}
           >
