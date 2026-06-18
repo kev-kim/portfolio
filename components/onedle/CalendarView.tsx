@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { Puzzle } from "@/lib/onedle/puzzles";
 import type { PuzzleResult } from "@/lib/onedle/storage";
@@ -37,7 +37,16 @@ const MONTH_NAMES = [
 ];
 
 export function CalendarView({ puzzles, completedPuzzles, initialMonth, highlightDate }: Props) {
-  const todayStr = new Date().toISOString().slice(0, 10);
+  // Start with UTC (matches server render), correct to local timezone after mount.
+  const [todayStr, setTodayStr] = useState(new Date().toISOString().slice(0, 10));
+  useEffect(() => {
+    const d = new Date();
+    setTodayStr([
+      d.getFullYear(),
+      String(d.getMonth() + 1).padStart(2, "0"),
+      String(d.getDate()).padStart(2, "0"),
+    ].join("-"));
+  }, []);
   const accentDate = highlightDate ?? todayStr;
   const defaultMonth = initialMonth ?? monthKey(todayStr);
   const [currentMonth, setCurrentMonth] = useState(defaultMonth);

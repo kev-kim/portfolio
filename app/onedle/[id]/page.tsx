@@ -32,17 +32,6 @@ export default async function PuzzlePage({
   if (!puzzle) notFound();
 
   const allPuzzles = getAllPuzzles();
-  const todayStr = new Date().toISOString().slice(0, 10);
-
-  // Don't reveal future puzzles
-  if (puzzle.date > todayStr) {
-    return (
-      <div className="text-center py-20">
-        <p className="font-mono text-muted">This puzzle isn't available yet.</p>
-        <p className="font-mono text-xs text-muted/60 mt-2">Come back on {puzzle.date}.</p>
-      </div>
-    );
-  }
 
   return <GameClient puzzle={puzzle} allPuzzles={allPuzzles} />;
 }

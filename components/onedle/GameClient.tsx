@@ -8,6 +8,7 @@ import { StatsModal } from "@/components/onedle/StatsModal";
 import { validateGuess } from "@/lib/onedle/hash";
 import { getResult, saveResult, getStats, getInProgressAttempts, saveInProgressAttempts, clearInProgress } from "@/lib/onedle/storage";
 import type { Puzzle } from "@/lib/onedle/puzzles";
+import { localDateStr } from "@/lib/onedle/puzzles";
 import type { PuzzleResult } from "@/lib/onedle/storage";
 
 type KeyState = "unused" | "absent" | "present" | "correct";
@@ -180,6 +181,15 @@ export function GameClient({ puzzle, allPuzzles }: Props) {
 
   const keyStates = buildKeyStates(puzzle.clues);
   const stats = getStats();
+
+  if (mounted && puzzle.date > localDateStr()) {
+    return (
+      <div className="text-center py-20">
+        <p className="font-mono text-muted">This puzzle isn&apos;t available yet.</p>
+        <p className="font-mono text-xs text-muted/60 mt-2">Come back on {puzzle.date}.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex flex-col items-center gap-5 pb-16">

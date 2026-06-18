@@ -31,6 +31,23 @@ function todayUTC(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+// Returns today's date in the browser's local timezone — call only from client code.
+export function localDateStr(): string {
+  const d = new Date();
+  return [
+    d.getFullYear(),
+    String(d.getMonth() + 1).padStart(2, "0"),
+    String(d.getDate()).padStart(2, "0"),
+  ].join("-");
+}
+
+// Puzzle ID for today using local timezone — call only from client code.
+export function puzzleIdForLocalDate(): number {
+  const epochMs = new Date(EPOCH + "T00:00:00").getTime();
+  const todayMs = new Date(localDateStr() + "T00:00:00").getTime();
+  return Math.floor((todayMs - epochMs) / 86400000) + 1;
+}
+
 const puzzles = puzzleData as Puzzle[];
 const byId = new Map(puzzles.map((p) => [p.id, p]));
 const byDate = new Map(puzzles.map((p) => [p.date, p]));
