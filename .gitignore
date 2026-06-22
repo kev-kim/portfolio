@@ -2,6 +2,10 @@
 
 # dependencies
 /node_modules
+# nested /kci demo app (self-contained, builds independently)
+/korean-company-intel/node_modules
+/korean-company-intel/.next
+/korean-company-intel/tsconfig.tsbuildinfo
 /.pnp
 .pnp.*
 .yarn/*

@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // The /kci demo is a separate, self-contained Next app — lint it in its own dir.
+    "korean-company-intel/**",
   ]),
 ]);
 

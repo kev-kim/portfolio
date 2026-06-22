@@ -31,7 +31,7 @@ export const projects: Project[] = [
       "Engineered a multi-stage NLP pipeline in Dagster using Gemini Flash for triage and Claude Sonnet for structured entity and event extraction, with Voyage AI embeddings and SimHash-based deduplication.",
       "Built a Next.js + TypeScript frontend with real-time news timelines and company-level filtering, deployed on Vercel with Supabase Auth and Fly.io API hosting.",
     ],
-    links: [],
+    links: [{ label: "Live demo", href: "/kci" }],
   },
   {
     slug: "splitit",
