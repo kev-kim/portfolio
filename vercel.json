@@ -2,5 +2,9 @@
   "framework": "nextjs",
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "rewrites": [
+    { "source": "/kci", "destination": "https://market-intelligence-wine.vercel.app/kci" },
+    { "source": "/kci/:path*", "destination": "https://market-intelligence-wine.vercel.app/kci/:path*" }
+  ]
 }
