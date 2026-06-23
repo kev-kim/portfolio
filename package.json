@@ -8,9 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "generate:puzzles": "npx tsx scripts/generate_puzzles.ts --count=400",
-    "dev:kci": "npm --prefix korean-company-intel run dev",
-    "dev:all": "npm run dev & npm run dev:kci & wait"
+    "generate:puzzles": "npx tsx scripts/generate_puzzles.ts --count=400"
   },
   "dependencies": {
     "framer-motion": "^12.40.0",
