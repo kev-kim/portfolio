@@ -1,10 +1,9 @@
 /** @type {import('next').NextConfig} */
 
-// Served as a Next.js Multi-Zone "secondary" app under a path prefix on the
-// portfolio domain (yoursite.com/kci). The portfolio's main app rewrites /kci/*
-// to this app (see ../next.config.ts). basePath defaults to /kci so this app is
-// correctly addressable both standalone and when proxied; override with
-// NEXT_PUBLIC_BASE_PATH to mount at a different prefix.
+// Served as a Next.js Multi-Zone "secondary" app under /kci on the portfolio
+// domain (the portfolio rewrites /kci/* here — see ../next.config.ts). basePath
+// defaults to /kci so the app is correctly addressable standalone and when
+// proxied; override with NEXT_PUBLIC_BASE_PATH to mount at a different prefix.
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "/kci"
 
 const nextConfig = {
@@ -17,7 +16,6 @@ const nextConfig = {
     return [{ source: "/", destination: "/dashboard", permanent: false }]
   },
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000",
     NEXT_PUBLIC_BASE_PATH: basePath,
   },
 }

@@ -1,14 +1,15 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+/**
+ * DATA LAYER ENTRY POINT — portfolio copy.
+ *
+ * This copy is hardcoded to the in-memory DEMO backend (no real-api client, no
+ * env flag) so it is always fully self-contained. Screens import `api` from here.
+ * Types are re-exported from `mock-api` so screens import value + types from one
+ * module. (The source app in the market-intelligence repo keeps the env-driven
+ * demo/real dispatcher; here it is intentionally demo-only.)
+ */
+export * from "./mock-api"
 
-async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: { "Content-Type": "application/json", ...init?.headers },
-    ...init,
-  })
-  if (!res.ok) throw new Error(`API error ${res.status}: ${path}`)
-  return res.json() as Promise<T>
-}
+import { demoApi } from "./mock-api"
 
-export const api = {
-  health: () => apiFetch<{ status: string }>("/health"),
-}
+export const IS_DEMO = true
+export const api = demoApi
